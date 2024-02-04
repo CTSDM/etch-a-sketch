@@ -1,0 +1,30 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: beige;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container-main {
+    border: solid 2px blue;
+    height: 900px;
+    width: 900px;
+    margin: auto 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.squares {
+    border: solid 1px black;
+    background-color: aliceblue;
+    flex: 1 1 auto;
+}
+
+.active {
+    display: flex;
+    background-color: palevioletred;
+    flex: 1 1 auto;
+}
