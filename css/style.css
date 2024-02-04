@@ -23,8 +23,12 @@ body {
     flex: 1 1 auto;
 }
 
-.active {
+.container-boxes {
     display: flex;
     background-color: palevioletred;
     flex: 1 1 auto;
+}
+
+.squares:hover {
+    border-color: goldenrod;
 }
