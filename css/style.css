@@ -27,6 +27,7 @@ body {
     display: flex;
     background-color: palevioletred;
     flex: 1 1 auto;
+    box-sizing: border-box;
 }
 
 .squares:hover {
