@@ -10,7 +10,7 @@ let modeValue = 0; // 0: rainbow mode; 1: darkening mode; 2: whitening mode, 3: 
 let modeTexts = ['Rainbow', 'Darkening', 'Whitening', 'Erase', 'Clear'];
 let darkening = true;
 let whitening = false;
-let clear = true; // Indicates if the canvas is totally clear, all white
+let clear = false; // Indicates if the canvas is totally clear, all white
 let gridOn = false;
 sizeInitial = 16;  // Initial size of the canvas
 
@@ -26,17 +26,8 @@ for (let i = 0; i < btnsMode.length; ++i) {
     })
 }
 
-// This is in average around 1.5 times faster than creating a new Canvas (running locally on Chrome 121.0.6167.139)
-btnClear.addEventListener('click', () => {
-    if (!clear) {
-        for (let i = 0; i < sizeInitial; ++i) {
-            for (let j = 0; j < sizeInitial; ++j) {
-            containerMain.childNodes[i].childNodes[j].style.backgroundColor = `rgb(255, 255, 255)`;
-            }
-        }
-        clear = !clear;
-    }
-})
+// This is in average around 1.5 times faster than just creating a new Canvas (running locally on Chrome 121.0.6167.139)
+btnClear.addEventListener('click', clearCanvas)
 
 btnGrid.addEventListener('click', () => {
     gridOn = !gridOn;
@@ -49,11 +40,19 @@ btnGrid.addEventListener('click', () => {
     btnGrid.textContent = `${modeText} grid`;
 })
 
-
-createCanvas(sizeInitial);
+function clearCanvas() {
+    if (!clear) {
+        for (let i = 0; i < sizeInitial; ++i) {
+            for (let j = 0; j < sizeInitial; ++j) {
+                containerMain.childNodes[i].childNodes[j].style.backgroundColor = `rgb(255, 255, 255)`;
+            }
+        }
+        clear = !clear;
+    }
+}
 
 function createCanvas(s) {
-    console.time();
+    clear = false;
     sizeInitial = s;
     containerMain.replaceChildren();
     for (let i = 0; i < s; i++) {
@@ -71,7 +70,7 @@ function createCanvas(s) {
         rowContainer.classList.toggle('container-boxes');
         containerMain.appendChild(rowContainer);
     }
-    console.timeEnd();
+    clearCanvas();
 }
 
 function setColor() {
@@ -91,12 +90,7 @@ function setColor() {
             nActivation = 0;
         }
         else if (modeValue === 1 && nActivation < 10) {
-            let RgbCurrent;
-            if (nActivation === 0) {
-                RgbCurrent = [255, 255, 255];
-            } else {
-                RgbCurrent = getCurrentColor(this.style.backgroundColor);
-            }
+            let RgbCurrent = getCurrentColor(this.style.backgroundColor);
             let newRgbArray = getNewColor(RgbCurrent, nActivation);
             this.style.backgroundColor = `rgb(${newRgbArray[0]}, ${newRgbArray[1]}, ${newRgbArray[2]})`;
             nActivation++;
@@ -137,9 +131,11 @@ function getNewColor(rgbArray, nActivation) {
     for (let idx in rgbArray) {
         if (nActivation >= 0) {
             let color = rgbArray[idx];
-            let baseColor = (DARKENING_TOTAL_STEPS * color - (nActivation + 1) * refColor) / (DARKENING_TOTAL_STEPS - (nActivation + 1));
+            let baseColor = (DARKENING_TOTAL_STEPS * color - (nActivation) * refColor) / (DARKENING_TOTAL_STEPS - (nActivation));
             rgbArray[idx] = parseInt((nActivation + 2) * (refColor - baseColor) / DARKENING_TOTAL_STEPS + baseColor);
         }
     }
     return rgbArray
 }
+
+createCanvas(sizeInitial);
