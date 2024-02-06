@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/script.js" defer></script>
-  </head>
-  <body>
-    <div id="mode-display">Current mode: Rainbow Mode</div>
-    <div>
-      <button class="rainbow active">Switch to rainbow mode</button>
-      <button class="darkening">Switch to darkening mode</button>
-      <button class="whitening">Switch to whitening mode</button>
-      <button class="erase">Switch to erase mode</button>
-    </div>
-    <div class="container-main"></div>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/script.js" defer></script>
+</head>
+
+<body>
+  <div id="mode-display">Current mode: Rainbow Mode</div>
+  <div class="options">
+    <button class="clear">Clear the canvas</button>
+    <button id="grid">Enable grid</button>
+  </div>
+  <div>
+    <button class="mode rainbow active">Switch to rainbow mode</button>
+    <button class="mode darkening">Switch to darkening mode</button>
+    <button class="mode whitening">Switch to whitening mode</button>
+    <button class="mode erase">Switch to erase mode</button>
+  </div>
+  <div class="container-main"></div>
+</body>
+
 </html>
