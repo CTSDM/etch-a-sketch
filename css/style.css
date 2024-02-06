@@ -20,7 +20,7 @@ body {
 
 .squares {
     border: solid 1px black;
-    background-color: aliceblue;
+    background-color: white;
     flex: 1 1 auto;
 }
 

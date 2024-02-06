@@ -4,8 +4,8 @@ const divText = document.querySelector('#mode-display')
 let mouseClicked = false;
 const numberMatrixActivation = [[]];
 const DARKENING_TOTAL_STEPS = 10;
-let modeValue = 0; // 0: rainbow mode; 1: darkening mode; 2: whitening mode
-let modeTexts = ['Rainbow', 'Darkening', 'Whitening'];
+let modeValue = 0; // 0: rainbow mode; 1: darkening mode; 2: whitening mode, 3: erase mode
+let modeTexts = ['Rainbow', 'Darkening', 'Whitening', 'Erase'];
 let darkening = true;
 let whitening = false;
 
@@ -34,7 +34,6 @@ function createCanvas(size) {
             rowElement.classList.add(`${i}-${j}`)
             rowElement.addEventListener('mouseenter', setColor);
             rowElement.addEventListener('mousedown', setColor);
-
             rowContainer.appendChild(rowElement);
         }
         rowContainer.classList.toggle('container-boxes');
@@ -46,26 +45,33 @@ function setColor() {
     if (mouseClicked === true) {
         const index = getArrayIndexBox(this.className);
         let nActivation = numberMatrixActivation[index[0]][index[1]];
-        if (nActivation === 0) {
+        if (modeValue === 0) {
             let redVal = Math.floor(Math.random() * 256);
             let greenVal = Math.floor(Math.random() * 256);
             let blueVal = Math.floor(Math.random() * 256);
             this.style.backgroundColor = `rgb(${redVal}, ${greenVal}, ${blueVal})`;
+            nActivation++;
+        } else if (modeValue === 3) {
+            this.style.backgroundColor = `rgb(${255}, ${255}, ${255})`;
+            nActivation = 0;
         }
-        else if (nActivation < 10) {
-            let RgbCurrent = getCurrentColor(this.style.backgroundColor);
+        else if (modeValue === 1 && nActivation < 10) {
+            let RgbCurrent;
+            if (nActivation === 0) {
+                RgbCurrent = [255, 255, 255];
+            } else {
+                RgbCurrent = getCurrentColor(this.style.backgroundColor);
+            }
             let newRgbArray = getNewColor(RgbCurrent, nActivation);
             this.style.backgroundColor = `rgb(${newRgbArray[0]}, ${newRgbArray[1]}, ${newRgbArray[2]})`;
+            nActivation++;
         }
-        if (whitening) {
-            if (nActivation > 0) {
-                numberMatrixActivation[index[0]][index[1]] -= 1;
-            }
-        } else {
-            if (nActivation < 9) {
-                numberMatrixActivation[index[0]][index[1]] += 1;
-            }
+        else if (modeValue === 2 && nActivation > 0) {
+            // call whitening
+            // eventually it will be merged with the top on
+            nActivation--;
         }
+        numberMatrixActivation[index[0]][index[1]] = nActivation;
     }
 }
 
@@ -86,8 +92,7 @@ function getCurrentColor(colorStr) {
 }
 
 function getNewColor(rgbArray, nActivation) {
-    let refColor = whitening ? 255 : 0;
-    if (nActivation === 0) return;
+    let refColor = modeValue[2] ? 255 : 0;
     if (nActivation === 9 && darkening) {
         rgbArray = [0, 0, 0];
         return rgbArray
