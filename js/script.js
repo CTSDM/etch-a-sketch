@@ -45,12 +45,13 @@ function setColor() {
     if (mouseClicked === true) {
         const index = getArrayIndexBox(this.className);
         let nActivation = numberMatrixActivation[index[0]][index[1]];
+    
         if (modeValue === 0) {
             let redVal = Math.floor(Math.random() * 256);
             let greenVal = Math.floor(Math.random() * 256);
             let blueVal = Math.floor(Math.random() * 256);
             this.style.backgroundColor = `rgb(${redVal}, ${greenVal}, ${blueVal})`;
-            nActivation++;
+            nActivation = 1;
         } else if (modeValue === 3) {
             this.style.backgroundColor = `rgb(${255}, ${255}, ${255})`;
             nActivation = 0;
@@ -98,11 +99,13 @@ function getNewColor(rgbArray, nActivation) {
         return rgbArray
     }
     // cambiar l'ogica para que aclaree, that is, road to 255
+    console.log(nActivation)
     for (let idx in rgbArray) {
-        if (nActivation > 0) {
+        if (nActivation >= 0) {
             let color = rgbArray[idx];
-            let baseColor = (DARKENING_TOTAL_STEPS * color - nActivation * refColor) / (DARKENING_TOTAL_STEPS - (nActivation));
-            rgbArray[idx] = parseInt((nActivation + 1) * (refColor - baseColor) / DARKENING_TOTAL_STEPS + baseColor);
+            let baseColor = (DARKENING_TOTAL_STEPS * color - (nActivation + 1) * refColor) / (DARKENING_TOTAL_STEPS - (nActivation + 1));
+            console.log(baseColor)
+            rgbArray[idx] = parseInt((nActivation + 2) * (refColor - baseColor) / DARKENING_TOTAL_STEPS + baseColor);
         }
     }
     return rgbArray
