@@ -140,8 +140,9 @@ function getNewColor(rgbArray, nActivation) {
     for (let idx in rgbArray) {
         if (nActivation >= 0) {
             let color = rgbArray[idx];
-            let baseColor = (DARKENING_TOTAL_STEPS * color - (nActivation) * refColor) / (DARKENING_TOTAL_STEPS - (nActivation));
-            rgbArray[idx] = parseInt((nActivation + 2) * (refColor - baseColor) / DARKENING_TOTAL_STEPS + baseColor);
+            let baseColor = (nActivation === 0) ? color : (DARKENING_TOTAL_STEPS * color - (nActivation) * refColor) / (DARKENING_TOTAL_STEPS - (nActivation));
+            console.log(baseColor)
+            rgbArray[idx] = parseInt((nActivation + 1) * (refColor - baseColor) / DARKENING_TOTAL_STEPS + baseColor);
         }
     }
     return rgbArray
