@@ -54,3 +54,8 @@ button {
 .grid {
     border: solid 1px black;
 }
+
+datalist {
+    display: flex;
+    justify-content: space-between;
+}

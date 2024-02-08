@@ -2,7 +2,8 @@ const containerMain = document.querySelector('.container-main');
 const btnsMode = document.querySelectorAll('.mode');
 const btnClear = document.querySelector('.clear')
 const btnGrid = document.querySelector('#grid');
-const divText = document.querySelector('#mode-display')
+const divText = document.querySelector('#mode-display');
+const sliderSize = document.querySelector('#grid-size');
 let mouseClicked = false;
 const numberMatrixActivation = [[]];
 const DARKENING_TOTAL_STEPS = 10;
@@ -26,19 +27,27 @@ for (let i = 0; i < btnsMode.length; ++i) {
     })
 }
 
+sliderSize.addEventListener('click', () => {
+    createCanvas(sliderSize.value);
+})
+
 // This is in average around 1.5 times faster than just creating a new Canvas (running locally on Chrome 121.0.6167.139)
 btnClear.addEventListener('click', clearCanvas)
 
 btnGrid.addEventListener('click', () => {
     gridOn = !gridOn;
-    for (let i = 0; i < sizeInitial; ++i) {
-        for (let j = 0; j < sizeInitial; ++j) {
-        containerMain.childNodes[i].childNodes[j].classList.toggle('grid');
-        }
-    }
+    addGrid();
     let modeText = gridOn ? 'Disable' : 'Enable';
     btnGrid.textContent = `${modeText} grid`;
 })
+
+function addGrid() {
+    for (let i = 0; i < sizeInitial; ++i) {
+        for (let j = 0; j < sizeInitial; ++j) {
+            containerMain.childNodes[i].childNodes[j].classList.toggle('grid');
+        }
+    }
+}
 
 function clearCanvas() {
     if (!clear) {
@@ -70,14 +79,14 @@ function createCanvas(s) {
         rowContainer.classList.toggle('container-boxes');
         containerMain.appendChild(rowContainer);
     }
-    clearCanvas();
+    if (gridOn) addGrid();
 }
 
 function setColor() {
     if (mouseClicked === true) {
         const index = getArrayIndexBox(this.className);
         let nActivation = numberMatrixActivation[index[0]][index[1]];
-    
+
         if (modeValue === 0) {
             let redVal = Math.floor(Math.random() * 256);
             let greenVal = Math.floor(Math.random() * 256);
