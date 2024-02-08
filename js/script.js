@@ -4,6 +4,7 @@ const btnClear = document.querySelector('.clear')
 const btnGrid = document.querySelector('#grid');
 const divText = document.querySelector('#mode-display');
 const sliderSize = document.querySelector('#grid-size');
+const colorPicker = document.querySelector('#color-picker');
 let mouseClicked = false;
 const numberMatrixActivation = [[]];
 const DARKENING_TOTAL_STEPS = 10;
@@ -86,6 +87,16 @@ function setColor() {
     if (mouseClicked === true) {
         const index = getArrayIndexBox(this.className);
         let nActivation = numberMatrixActivation[index[0]][index[1]];
+
+        if (modeValue === 0) {
+            let color = colorPicker.value;
+            let redVal = color.slice(1, 3);
+            let greenVal = color.slice(3, 5);
+            let blueVal = color.slice(5);
+            this.style.backgroundColor = `#${redVal}${greenVal}${blueVal}`;
+            nActivation = 1;
+            clear = false; 
+        }
 
         if (modeValue === 1) {
             let redVal = Math.floor(Math.random() * 256);
