@@ -7,8 +7,8 @@ const sliderSize = document.querySelector('#grid-size');
 let mouseClicked = false;
 const numberMatrixActivation = [[]];
 const DARKENING_TOTAL_STEPS = 10;
-let modeValue = 0; // 0: single color, 1: rainbow mode; 2: darkening mode; 3: whitening mode, 4: erase mode, 5: clear
-let modeTexts = ['Single Color', 'Rainbow', 'Darkening', 'Whitening', 'Erase', 'Clear'];
+let modeValue = 0; // 0: single color, 1: rainbow mode; 2: darkening mode; 3: erase mode
+let modeTexts = ['Single Color', 'Rainbow', 'Darkening', 'Whitening', 'Erase'];
 let darkening = true;
 let whitening = false;
 let clear = false; // Indicates if the canvas is totally clear, all white
@@ -94,7 +94,7 @@ function setColor() {
             this.style.backgroundColor = `rgb(${redVal}, ${greenVal}, ${blueVal})`;
             nActivation = 1;
             clear = false;
-        } else if (modeValue === 4) {
+        } else if (modeValue === 3) {
             this.style.backgroundColor = `rgb(${255}, ${255}, ${255})`;
             nActivation = 0;
         }
@@ -106,9 +106,7 @@ function setColor() {
             clear = false
         }
         else if (modeValue === 3 && nActivation > 0) {
-            // call whitening
-            // eventually it will be merged with the top on
-            nActivation--;
+
         }
         numberMatrixActivation[index[0]][index[1]] = nActivation;
     }
@@ -131,17 +129,16 @@ function getCurrentColor(colorStr) {
 }
 
 function getNewColor(rgbArray, nActivation) {
-    let refColor = modeValue[3] ? 255 : 0;
-    if (nActivation === 9 && darkening) {
+    let refColor =  0;
+    if (nActivation === 9) {
         rgbArray = [0, 0, 0];
         return rgbArray
     }
-    // cambiar l'ogica para que aclaree, that is, road to 255
+
     for (let idx in rgbArray) {
         if (nActivation >= 0) {
             let color = rgbArray[idx];
             let baseColor = (nActivation === 0) ? color : (DARKENING_TOTAL_STEPS * color - (nActivation) * refColor) / (DARKENING_TOTAL_STEPS - (nActivation));
-            console.log(baseColor)
             rgbArray[idx] = parseInt((nActivation + 1) * (refColor - baseColor) / DARKENING_TOTAL_STEPS + baseColor);
         }
     }
